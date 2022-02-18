@@ -1,15 +1,17 @@
-package com.wang.wiki;
+package com.wang.wiki.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 
 /**
  * @author Wang
  * @Overview 启动文件
  */
+@ComponentScan("com.wang")
 @SpringBootApplication
 public class WikiApplication {
 
