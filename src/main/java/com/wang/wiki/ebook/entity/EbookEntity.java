@@ -15,7 +15,7 @@ import lombok.ToString;
 @TableName("wiki_ebook")
 public class EbookEntity{
     @TableId("c_oid")
-    private Integer id;
+    private Long id;
 
     /**
      * 名称

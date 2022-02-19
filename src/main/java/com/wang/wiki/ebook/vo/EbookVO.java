@@ -11,7 +11,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class EbookVO extends PageReq {
-    private Integer id;
+    private Long id;
 
     /**
      * 名称
