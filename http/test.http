@@ -10,7 +10,5 @@ name=TEST
 
 ###
 
-POST http://localhost/test/hello/post
-Content-Type: application/x-www-form-urlencoded
-
-name=TEST2
+GET http://localhost/test/list
+Accept: application/json
