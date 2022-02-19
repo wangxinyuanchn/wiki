@@ -1,4 +1,4 @@
-GET http://localhost/test/hello
+GET http://localhost/ebook/hello
 Accept: application/json
 
 ###
@@ -10,5 +10,5 @@ name=TEST
 
 ###
 
-GET http://localhost/test/list
+GET http://localhost/ebook/list?name=My
 Accept: application/json
