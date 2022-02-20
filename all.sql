@@ -74,17 +74,17 @@ create table `content` (
 ) engine=innodb default charset=utf8mb4 comment='文档内容';
 
 -- 用户表
-drop table if exists `user`;
-create table `user` (
+drop table if exists `wiki_user`;
+create table `wiki_user` (
   `c_oid` bigint not null comment 'ID',
-  `login_name` varchar(50) not null comment '登陆名',
+  `c_login_name` varchar(50) not null comment '登陆名',
   `c_name` varchar(50) comment '昵称',
-  `password` char(32) not null comment '密码',
+  `c_password` char(32) not null comment '密码',
   primary key (`c_oid`),
-  unique key `login_name_unique` (`login_name`)
+  unique key `login_name_unique` (`c_login_name`)
 ) engine=innodb default charset=utf8mb4 comment='用户';
 
-insert into `user` (c_oid, `login_name`, `c_name`, `password`) values (1, 'test', '测试', 'e70e2222a9d67c4f2eae107533359aa4');
+insert into `wiki_user` (c_oid, `c_login_name`, `c_name`, `c_password`) values (1, 'test', '测试', 'e70e2222a9d67c4f2eae107533359aa4');
 
 -- 电子书快照表
 drop table if exists `ebook_snapshot`;

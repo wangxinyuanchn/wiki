@@ -1,6 +1,5 @@
-package com.wang.wiki.ebook.controller;
+package com.wang.wiki.exception;
 
-import com.wang.wiki.exception.BusinessException;
 import com.wang.wiki.resp.CommonResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

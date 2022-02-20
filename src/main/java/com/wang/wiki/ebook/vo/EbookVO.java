@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
+ * 电子书
  * @author Wang
- * @Overview 电子书
  */
 @Data
 @ToString
