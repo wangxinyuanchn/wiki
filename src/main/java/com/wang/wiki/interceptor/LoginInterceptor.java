@@ -1,8 +1,9 @@
 package com.wang.wiki.interceptor;
 
 import com.alibaba.fastjson.JSON;
+import com.wang.wiki.constants.LoginUserContext;
+import com.wang.wiki.constants.UtilConstant;
 import com.wang.wiki.user.vo.UserVO;
-import com.wang.wiki.util.LoginUserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 拦截器：Spring框架特有的，常用于登录校验，权限校验，请求日志打印
+ *
+ * @author Wang
  */
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
@@ -24,10 +27,10 @@ public class LoginInterceptor implements HandlerInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(LoginInterceptor.class);
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // 打印请求信息
         LOG.info("------------- LoginInterceptor 开始 -------------");
         long startTime = System.currentTimeMillis();
@@ -35,7 +38,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         // OPTIONS请求不做校验,
         // 前后端分离的架构, 前端会发一个OPTIONS请求先做预检, 对预检请求不做校验
-        if (request.getMethod().toUpperCase().equals("OPTIONS")) {
+        if (UtilConstant.OPTIONS.equalsIgnoreCase(request.getMethod())) {
             return true;
         }
 
@@ -63,13 +66,13 @@ public class LoginInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
         long startTime = (Long) request.getAttribute("requestStartTime");
         LOG.info("------------- LoginInterceptor 结束 耗时：{} ms -------------", System.currentTimeMillis() - startTime);
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-//        LOG.info("LogInterceptor 结束");
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        LOG.info("LogInterceptor 结束");
     }
 }

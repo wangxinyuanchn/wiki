@@ -2,7 +2,7 @@ package com.wang.wiki.aspect;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
-import com.wang.wiki.util.RequestContext;
+import com.wang.wiki.constants.RequestContext;
 import com.wang.wiki.util.SnowFlake;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;

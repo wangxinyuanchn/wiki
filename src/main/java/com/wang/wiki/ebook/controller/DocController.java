@@ -58,9 +58,10 @@ public class DocController {
      * @return 返回结果
      */
     @PostMapping("/save")
-    public CommonResp save(@Valid @RequestBody DocVO req) {
-        CommonResp resp = new CommonResp<>();
-        docService.save(req);
+    public CommonResp<Boolean> save(@Valid @RequestBody DocVO req) {
+        CommonResp<Boolean> resp = new CommonResp<>();
+        boolean bo = docService.save(req);
+        resp.setContent(Boolean.TRUE.equals(bo));
         return resp;
     }
 
@@ -71,10 +72,11 @@ public class DocController {
      * @return 返回结果
      */
     @DeleteMapping("/delete/{idsStr}")
-    public CommonResp delete(@PathVariable String idsStr) {
-        CommonResp resp = new CommonResp<>();
+    public CommonResp<Integer> delete(@PathVariable String idsStr) {
+        CommonResp<Integer> resp = new CommonResp<>();
         List<String> list = Arrays.asList(idsStr.split(","));
-        docService.delete(list);
+        int index = docService.delete(list);
+        resp.setContent(index);
         return resp;
     }
 
@@ -100,9 +102,10 @@ public class DocController {
      * @return 返回结果
      */
     @GetMapping("/vote/{id}")
-    public CommonResp vote(@PathVariable Long id) {
-        CommonResp commonResp = new CommonResp();
-        docService.vote(id);
+    public CommonResp<Boolean> vote(@PathVariable Long id) {
+        CommonResp<Boolean> commonResp = new CommonResp<>();
+        boolean bo = docService.vote(id);
+        commonResp.setContent(bo);
         return commonResp;
     }
 }

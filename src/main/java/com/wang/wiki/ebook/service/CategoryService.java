@@ -56,16 +56,16 @@ public class CategoryService {
         QueryWrapper<CategoryEntity> wrapper = new QueryWrapper<>();
         wrapper.orderByAsc("c_sort");
         Page<CategoryEntity> page = new Page<>(req.getPage(), req.getSize());
-        IPage<CategoryEntity> categoryEntityIPage = categoryMapper.selectPage(page, wrapper);
+        IPage<CategoryEntity> categoryEntityPage = categoryMapper.selectPage(page, wrapper);
 
-        LOG.info("总行数：{}", categoryEntityIPage.getTotal());
-        LOG.info("总页数：{}", categoryEntityIPage.getPages());
+        LOG.info("总行数：{}", categoryEntityPage.getTotal());
+        LOG.info("总页数：{}", categoryEntityPage.getPages());
 
         // 列表复制
-        List<CategoryVO> list = CopyUtil.copyList(categoryEntityIPage.getRecords(), CategoryVO.class);
+        List<CategoryVO> list = CopyUtil.copyList(categoryEntityPage.getRecords(), CategoryVO.class);
 
         PageResp<CategoryVO> pageResp = new PageResp<>();
-        pageResp.setTotal(categoryEntityIPage.getTotal());
+        pageResp.setTotal(categoryEntityPage.getTotal());
         pageResp.setList(list);
 
         return pageResp;

@@ -61,16 +61,19 @@ public class WebSocketServer {
     /**
      * 群发消息
      */
-    public void sendInfo(String message) {
+    public boolean sendInfo(String message) {
+        boolean bo = true;
         for (String token : map.keySet()) {
             Session session = map.get(token);
             try {
                 session.getBasicRemote().sendText(message);
             } catch (IOException e) {
+                bo = false;
                 LOG.error("推送消息失败：{}，内容：{}", token, message);
             }
             LOG.info("推送消息：{}，内容：{}", token, message);
         }
+        return bo;
     }
 
 }

@@ -57,16 +57,16 @@ public class EbookService {
             wrapper.eq("c_category2_id", req.getCategoryId2());
         }
         Page<EbookEntity> page = new Page<>(req.getPage(), req.getSize());
-        IPage<EbookEntity> ebookEntityIPage = ebookMapper.selectPage(page, wrapper);
+        IPage<EbookEntity> ebookEntityPage = ebookMapper.selectPage(page, wrapper);
 
-        LOG.info("总行数：{}", ebookEntityIPage.getTotal());
-        LOG.info("总页数：{}", ebookEntityIPage.getPages());
+        LOG.info("总行数：{}", ebookEntityPage.getTotal());
+        LOG.info("总页数：{}", ebookEntityPage.getPages());
 
         // 列表复制
-        List<EbookVO> list = CopyUtil.copyList(ebookEntityIPage.getRecords(), EbookVO.class);
+        List<EbookVO> list = CopyUtil.copyList(ebookEntityPage.getRecords(), EbookVO.class);
 
         PageResp<EbookVO> pageResp = new PageResp<>();
-        pageResp.setTotal(ebookEntityIPage.getTotal());
+        pageResp.setTotal(ebookEntityPage.getTotal());
         pageResp.setList(list);
 
         return pageResp;

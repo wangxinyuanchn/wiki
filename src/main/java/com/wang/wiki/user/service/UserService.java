@@ -46,16 +46,16 @@ public class UserService {
             wrapper.eq("c_login_name", req.getLoginName());
         }
         Page<UserEntity> page = new Page<>(req.getPage(), req.getSize());
-        IPage<UserEntity> userEntityIPage = userMapper.selectPage(page, wrapper);
+        IPage<UserEntity> userEntityPage = userMapper.selectPage(page, wrapper);
 
-        LOG.info("总行数：{}", userEntityIPage.getTotal());
-        LOG.info("总页数：{}", userEntityIPage.getPages());
+        LOG.info("总行数：{}", userEntityPage.getTotal());
+        LOG.info("总页数：{}", userEntityPage.getPages());
 
         // 列表复制
-        List<UserVO> list = CopyUtil.copyList(userEntityIPage.getRecords(), UserVO.class);
+        List<UserVO> list = CopyUtil.copyList(userEntityPage.getRecords(), UserVO.class);
 
         PageResp<UserVO> pageResp = new PageResp<>();
-        pageResp.setTotal(userEntityIPage.getTotal());
+        pageResp.setTotal(userEntityPage.getTotal());
         pageResp.setList(list);
 
         return pageResp;
@@ -70,8 +70,8 @@ public class UserService {
     public int save(UserVO req) {
         UserEntity user = CopyUtil.copy(req, UserEntity.class);
         if (ObjectUtils.isEmpty(req.getId())) {
-            UserEntity userDB = selectByLoginName(req.getLoginName());
-            if (ObjectUtils.isEmpty(userDB)) {
+            UserEntity userDb = selectByLoginName(req.getLoginName());
+            if (ObjectUtils.isEmpty(userDb)) {
                 // 新增
                 user.setId(snowFlake.nextId());
                 return userMapper.insert(user);
@@ -100,12 +100,12 @@ public class UserService {
     /**
      * 根据登陆名查询用户
      *
-     * @param LoginName 登陆名
+     * @param loginName 登陆名
      * @return 查询结果
      */
-    public UserEntity selectByLoginName(String LoginName) {
+    public UserEntity selectByLoginName(String loginName) {
         QueryWrapper<UserEntity> wrapper = new QueryWrapper<>();
-        wrapper.eq("c_login_name", LoginName);
+        wrapper.eq("c_login_name", loginName);
 
         List<UserEntity> userList = userMapper.selectList(wrapper);
         if (CollectionUtils.isEmpty(userList)) {

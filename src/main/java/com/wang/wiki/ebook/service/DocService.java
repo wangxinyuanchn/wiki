@@ -3,6 +3,8 @@ package com.wang.wiki.ebook.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wang.wiki.constants.RequestContext;
+import com.wang.wiki.constants.UtilConstant;
 import com.wang.wiki.ebook.entity.ContentEntity;
 import com.wang.wiki.ebook.entity.DocEntity;
 import com.wang.wiki.ebook.mapper.ContentMapper;
@@ -13,7 +15,6 @@ import com.wang.wiki.exception.BusinessExceptionCode;
 import com.wang.wiki.resp.PageResp;
 import com.wang.wiki.util.CopyUtil;
 import com.wang.wiki.util.RedisUtil;
-import com.wang.wiki.util.RequestContext;
 import com.wang.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,16 +69,16 @@ public class DocService {
         QueryWrapper<DocEntity> wrapper = new QueryWrapper<>();
         wrapper.orderByAsc("c_sort");
         Page<DocEntity> page = new Page<>(req.getPage(), req.getSize());
-        IPage<DocEntity> docEntityIPage = docMapper.selectPage(page, wrapper);
+        IPage<DocEntity> docEntityPage = docMapper.selectPage(page, wrapper);
 
-        LOG.info("总行数：{}", docEntityIPage.getTotal());
-        LOG.info("总页数：{}", docEntityIPage.getPages());
+        LOG.info("总行数：{}", docEntityPage.getTotal());
+        LOG.info("总页数：{}", docEntityPage.getPages());
 
         // 列表复制
-        List<DocVO> list = CopyUtil.copyList(docEntityIPage.getRecords(), DocVO.class);
+        List<DocVO> list = CopyUtil.copyList(docEntityPage.getRecords(), DocVO.class);
 
-        PageResp<DocVO> pageResp = new PageResp();
-        pageResp.setTotal(docEntityIPage.getTotal());
+        PageResp<DocVO> pageResp = new PageResp<>();
+        pageResp.setTotal(docEntityPage.getTotal());
         pageResp.setList(list);
 
         return pageResp;
@@ -89,8 +90,8 @@ public class DocService {
      * @param req 新增/修改电子书文案内容
      * @return 返回结果
      */
-    @Transactional
-    public void save(DocVO req) {
+    @Transactional(rollbackFor = Exception.class)
+    public boolean save(DocVO req) {
         DocEntity doc = CopyUtil.copy(req, DocEntity.class);
         ContentEntity content = CopyUtil.copy(req, ContentEntity.class);
         if (ObjectUtils.isEmpty(req.getId())) {
@@ -110,6 +111,7 @@ public class DocService {
                 contentMapper.insert(content);
             }
         }
+        return true;
     }
 
     /**
@@ -118,10 +120,10 @@ public class DocService {
      * @param ids 电子书文案Id
      * @return 返回结果
      */
-    public void delete(List<String> ids) {
+    public int delete(List<String> ids) {
         QueryWrapper<DocEntity> wrapper = new QueryWrapper<>();
         wrapper.in("c_oid", ids);
-        docMapper.delete(wrapper);
+        return docMapper.delete(wrapper);
     }
 
     /**
@@ -150,10 +152,18 @@ public class DocService {
      * @param id 电子书文案Id
      * @return 返回结果
      */
-    public void vote(Long id) {
+    public boolean vote(Long id) {
         // 远程IP+doc.id作为key，24小时内不能重复
         String ip = RequestContext.getRemoteAddress();
-        if (redisUtil.validateRepeat("DOC_VOTE_" + id + "_" + ip, 5000)) {
+        StringBuilder key = new StringBuilder();
+        key.append(UtilConstant.DOC);
+        key.append(UtilConstant.UNDERLINE);
+        key.append(UtilConstant.VOTE);
+        key.append(UtilConstant.UNDERLINE);
+        key.append(id);
+        key.append(UtilConstant.UNDERLINE);
+        key.append(ip);
+        if (redisUtil.validateRepeat(key.toString(), UtilConstant.NUM5000)) {
             DocEntity doc = docMapper.selectById(id);
             doc.setVoteCount(doc.getVoteCount() + 1);
             docMapper.updateById(doc);
@@ -163,7 +173,7 @@ public class DocService {
 
         // 推送消息
         DocEntity docDb = docMapper.selectById(id);
-        String logId = MDC.get("LOG_ID");
-        wsService.sendInfo("【" + docDb.getName() + "】被点赞！", logId);
+        String logId = MDC.get(UtilConstant.LOG + UtilConstant.UNDERLINE + UtilConstant.ID);
+        return wsService.sendInfo("【" + docDb.getName() + "】被点赞！", logId);
     }
 }

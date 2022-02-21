@@ -7,12 +7,11 @@ import com.wang.wiki.ebook.mapper.EbookMapper;
 import com.wang.wiki.ebook.mapper.EbookSnapshotMapper;
 import com.wang.wiki.ebook.vo.EbookSnapshotVO;
 import com.wang.wiki.util.CopyUtil;
+import com.wang.wiki.util.DateUtil;
 import com.wang.wiki.util.SnowFlake;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -34,14 +33,12 @@ public class EbookSnapshotJobService {
     @Resource
     private SnowFlake snowFlake;
 
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
     public void genSnapshot() {
         Date today = new Date();
-        Date yesterday = getDate(today, -1);
+        Date yesterday = DateUtil.getDate(today, -1);
 
         QueryWrapper<EbookSnapshotEntity> wrapper = new QueryWrapper<>();
-        wrapper.eq("c_date", sdf.format(today));
+        wrapper.eq("c_date", DateUtil.YMDSDF.format(today));
         ebookSnapshotMapper.delete(wrapper);
 
         List<EbookEntity> ebookEntityList = ebookMapper.selectList(null);
@@ -56,7 +53,7 @@ public class EbookSnapshotJobService {
             ebookSnapshotEntity.setVoteIncrease(ebookEntity.getVoteCount());
 
             QueryWrapper<EbookSnapshotEntity> lastWrapper = new QueryWrapper<>();
-            lastWrapper.eq("c_date", sdf.format(yesterday));
+            lastWrapper.eq("c_date", DateUtil.YMDSDF.format(yesterday));
             List<EbookSnapshotEntity> ebookSnapshotEntityList = ebookSnapshotMapper.selectList(lastWrapper);
             if (ebookSnapshotEntityList.size() > 0) {
                 EbookSnapshotEntity old = ebookSnapshotEntityList.get(0);
@@ -73,19 +70,12 @@ public class EbookSnapshotJobService {
     public List<EbookSnapshotVO> get30Statistic() {
         QueryWrapper<EbookSnapshotEntity> wrapper = new QueryWrapper<>();
         wrapper.select("c_date, sum(c_view_increase) c_view_increase, sum(c_vote_increase) c_vote_increase");
-        wrapper.between("c_date", getDate(new Date(), -30), getDate(new Date(), -1));
+        wrapper.between("c_date", DateUtil.getDate(new Date(), -30), DateUtil.getDate(new Date(), -1));
         wrapper.groupBy("c_date");
         wrapper.orderByAsc("c_date");
         List<EbookSnapshotEntity> ebookSnapshotEntityList = ebookSnapshotMapper.selectList(wrapper);
 
         return CopyUtil.copyList(ebookSnapshotEntityList, EbookSnapshotVO.class);
-    }
-
-    private Date getDate(Date today, int index) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(today);
-        c.add(Calendar.DAY_OF_MONTH, index);
-        return c.getTime();
     }
 
 }

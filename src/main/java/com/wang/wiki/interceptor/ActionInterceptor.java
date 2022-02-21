@@ -1,9 +1,10 @@
 package com.wang.wiki.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wang.wiki.constants.LoginUserContext;
+import com.wang.wiki.constants.UtilConstant;
 import com.wang.wiki.resp.CommonResp;
 import com.wang.wiki.user.vo.UserVO;
-import com.wang.wiki.util.LoginUserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,20 +29,21 @@ public class ActionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         // OPTIONS请求不做校验,
         // 前后端分离的架构, 前端会发一个OPTIONS请求先做预检, 对预检请求不做校验
-        if ("OPTIONS".equals(request.getMethod().toUpperCase())) {
+        if (UtilConstant.OPTIONS.equalsIgnoreCase(request.getMethod())) {
             return true;
         }
 
         UserVO userLoginResp = LoginUserContext.getUser();
-        if ("admin".equals(userLoginResp.getLoginName())) {
+        if (UtilConstant.ADMIN.equals(userLoginResp.getLoginName())) {
             // admin用户不拦截
             return true;
         }
 
         LOG.info("操作被拦截");
         response.setStatus(HttpStatus.OK.value());
-        CommonResp commonResp = new CommonResp();
+        CommonResp<Boolean> commonResp = new CommonResp<>();
         commonResp.setSuccess(false);
+        commonResp.setContent(false);
         commonResp.setMessage("哈哈，操作被拦截了，你就当操作成功了！示例网站暂不开放增删改操作");
         response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");

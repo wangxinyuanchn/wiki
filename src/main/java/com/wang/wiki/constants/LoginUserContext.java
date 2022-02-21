@@ -1,4 +1,4 @@
-package com.wang.wiki.util;
+package com.wang.wiki.constants;
 
 import com.wang.wiki.user.vo.UserVO;
 
