@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wang.wiki.ebook.entity.EbookSnapshotEntity;
 import com.wang.wiki.ebook.mapper.EbookSnapshotMapper;
 import com.wang.wiki.ebook.vo.EbookSnapshotVO;
+import com.wang.wiki.util.CopyUtil;
 import com.wang.wiki.util.DateUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -34,17 +34,7 @@ public class EbookSnapshotService {
         wrapper.groupBy("c_date");
         wrapper.orderByAsc("c_date");
         List<Map<String, Object>> ebookSnapshotEntityMap = ebookSnapshotMapper.selectMaps(wrapper);
-        List<EbookSnapshotVO> list = new ArrayList<>();
-        for (Map<String, Object> map : ebookSnapshotEntityMap) {
-            EbookSnapshotVO ebookSnapshotVO = new EbookSnapshotVO();
-            ebookSnapshotVO.setDate(DateUtil.parse(String.valueOf(map.get("date"))));
-            ebookSnapshotVO.setViewCount(Integer.parseInt(String.valueOf(map.get("viewCount"))));
-            ebookSnapshotVO.setVoteCount(Integer.parseInt(String.valueOf(map.get("voteCount"))));
-            ebookSnapshotVO.setViewIncrease(Integer.parseInt(String.valueOf(map.get("viewIncrease"))));
-            ebookSnapshotVO.setVoteIncrease(Integer.parseInt(String.valueOf(map.get("voteIncrease"))));
-            list.add(ebookSnapshotVO);
-        }
-        return list;
+        return CopyUtil.copyListMap(ebookSnapshotEntityMap, EbookSnapshotVO.class);
     }
 
     /**
@@ -57,15 +47,7 @@ public class EbookSnapshotService {
         wrapper.groupBy("c_date");
         wrapper.orderByAsc("c_date");
         List<Map<String, Object>> ebookSnapshotEntityMap = ebookSnapshotMapper.selectMaps(wrapper);
-        List<EbookSnapshotVO> list = new ArrayList<>();
-        for (Map<String, Object> map : ebookSnapshotEntityMap) {
-            EbookSnapshotVO ebookSnapshotVO = new EbookSnapshotVO();
-            ebookSnapshotVO.setDate(DateUtil.parse(String.valueOf(map.get("date"))));
-            ebookSnapshotVO.setViewIncrease(Integer.parseInt(String.valueOf(map.get("viewIncrease"))));
-            ebookSnapshotVO.setVoteIncrease(Integer.parseInt(String.valueOf(map.get("voteIncrease"))));
-            list.add(ebookSnapshotVO);
-        }
-        return list;
+        return CopyUtil.copyListMap(ebookSnapshotEntityMap, EbookSnapshotVO.class);
     }
 
 }
