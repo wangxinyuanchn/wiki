@@ -26,7 +26,7 @@
           <div class="wangeditor" :innerHTML="html"></div>
           <div class="vote-div">
             <a-button type="primary" shape="round" :size="'large'" @click="vote">
-              <template #icon>
+              <template #icon v-if="level1.length != 0">
                 <LikeOutlined/> &nbsp;点赞：{{ doc.voteCount }}
               </template>
             </a-button>

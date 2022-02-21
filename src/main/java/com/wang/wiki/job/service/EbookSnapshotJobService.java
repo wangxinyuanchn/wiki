@@ -5,8 +5,6 @@ import com.wang.wiki.ebook.entity.EbookEntity;
 import com.wang.wiki.ebook.entity.EbookSnapshotEntity;
 import com.wang.wiki.ebook.mapper.EbookMapper;
 import com.wang.wiki.ebook.mapper.EbookSnapshotMapper;
-import com.wang.wiki.ebook.vo.EbookSnapshotVO;
-import com.wang.wiki.util.CopyUtil;
 import com.wang.wiki.util.DateUtil;
 import com.wang.wiki.util.SnowFlake;
 import org.springframework.stereotype.Component;
@@ -62,20 +60,6 @@ public class EbookSnapshotJobService {
             }
             ebookSnapshotMapper.insert(ebookSnapshotEntity);
         }
-    }
-
-    /**
-     * 30天数值统计
-     */
-    public List<EbookSnapshotVO> get30Statistic() {
-        QueryWrapper<EbookSnapshotEntity> wrapper = new QueryWrapper<>();
-        wrapper.select("c_date, sum(c_view_increase) c_view_increase, sum(c_vote_increase) c_vote_increase");
-        wrapper.between("c_date", DateUtil.getDate(new Date(), -30), DateUtil.getDate(new Date(), -1));
-        wrapper.groupBy("c_date");
-        wrapper.orderByAsc("c_date");
-        List<EbookSnapshotEntity> ebookSnapshotEntityList = ebookSnapshotMapper.selectList(wrapper);
-
-        return CopyUtil.copyList(ebookSnapshotEntityList, EbookSnapshotVO.class);
     }
 
 }
