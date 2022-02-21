@@ -35,7 +35,7 @@ public class UserController {
     private RedisTemplate<String, String> redisTemplate;
 
     /**
-     * 用户列表查询
+     * 分页查询用户列表
      * @param req 查询条件
      * @return 查询结果
      */
@@ -48,8 +48,8 @@ public class UserController {
     }
 
     /**
-     * 新增用户
-     * @param req 用户内容
+     * 新增/修改用户
+     * @param req 新增/修改用户内容
      * @return 返回结果
      */
     @PostMapping("/save")

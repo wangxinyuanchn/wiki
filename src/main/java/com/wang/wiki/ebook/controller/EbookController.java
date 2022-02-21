@@ -11,8 +11,9 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ * 电子书
+ *
  * @author Wang
- * @Overview 电子书
  */
 @RestController
 @RequestMapping("/ebook")
@@ -22,7 +23,7 @@ public class EbookController {
     private EbookService ebookService;
 
     /**
-     * 电子书列表查询
+     * 查询全部电子书列表
      * @return 查询结果
      */
     @GetMapping("/all")
@@ -34,7 +35,7 @@ public class EbookController {
     }
 
     /**
-     * 电子书列表查询
+     * 分页查询电子书列表
      * @param req 查询条件
      * @return 查询结果
      */
@@ -47,8 +48,8 @@ public class EbookController {
     }
 
     /**
-     * 新增电子书
-     * @param req 新增电子书内容
+     * 新增/修改电子书
+     * @param req 新增/修改电子书内容
      * @return 返回结果
      */
     @PostMapping("/save")

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 复制工具类
+ *
  * @author Wang
  */
 public class CopyUtil {

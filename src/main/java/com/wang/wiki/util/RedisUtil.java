@@ -8,23 +8,28 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Redis缓存工具类
+ *
+ * @author Wang
+ */
 @Component
 public class RedisUtil {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisUtil.class);
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
-     * true：不存在，放一个KEY
-     * false：已存在
-     * @param key
-     * @param second
-     * @return
+     * 判断Redis缓存中是否存在相同key，是否过期
+     *
+     * @param key    key
+     * @param second 过期时间单位s
+     * @return true：不存在，放一个KEY, false：已存在
      */
     public boolean validateRepeat(String key, long second) {
-        if (redisTemplate.hasKey(key)) {
+        if (Boolean.TRUE.equals(redisTemplate.hasKey(key))) {
             LOG.info("key已存在：{}", key);
             return false;
         } else {

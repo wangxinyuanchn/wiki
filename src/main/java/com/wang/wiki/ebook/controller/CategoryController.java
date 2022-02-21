@@ -22,7 +22,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     /**
-     * 全部分类列表查询
+     * 查询全部分类列表
      * @return 查询结果
      */
     @GetMapping("/all")
@@ -34,7 +34,7 @@ public class CategoryController {
     }
 
     /**
-     * 分类列表查询
+     * 分页查询分类列表
      * @param req 查询条件
      * @return 查询结果
      */
@@ -47,8 +47,8 @@ public class CategoryController {
     }
 
     /**
-     * 新增分类
-     * @param req 新增分类内容
+     * 新增/修改分类
+     * @param req 新增/修改分类内容
      * @return 返回结果
      */
     @PostMapping("/save")

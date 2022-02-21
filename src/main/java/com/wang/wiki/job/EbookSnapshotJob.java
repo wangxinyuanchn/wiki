@@ -1,6 +1,6 @@
 package com.wang.wiki.job;
 
-import com.wang.wiki.ebook.service.EbookSnapshotService;
+import com.wang.wiki.job.service.EbookSnapshotJobService;
 import com.wang.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 /**
+ * 定时任务
+ * 生成今日电子书快照
+ *
  * @author Wang
  */
 @Component
@@ -19,7 +22,7 @@ public class EbookSnapshotJob {
     private static final Logger LOG = LoggerFactory.getLogger(EbookSnapshotJob.class);
 
     @Resource
-    private EbookSnapshotService ebookSnapshotService;
+    private EbookSnapshotJobService ebookSnapshotJobService;
 
     @Resource
     private SnowFlake snowFlake;
@@ -34,7 +37,7 @@ public class EbookSnapshotJob {
         MDC.put("LOG_ID", String.valueOf(snowFlake.nextId()));
         LOG.info("生成今日电子书快照开始");
         Long start = System.currentTimeMillis();
-        ebookSnapshotService.genSnapshot();
+        ebookSnapshotJobService.genSnapshot();
         LOG.info("生成今日电子书快照结束，耗时：{}毫秒", System.currentTimeMillis() - start);
     }
 
