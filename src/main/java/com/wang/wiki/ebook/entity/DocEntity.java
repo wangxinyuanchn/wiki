@@ -7,15 +7,28 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
+ * 电子书文档
+ *
  * @author Wang
- * @Overview 电子书
  */
 @Data
 @ToString
-@TableName("wiki_ebook")
-public class EbookEntity{
+@TableName("wiki_doc")
+public class DocEntity {
     @TableId("c_oid")
     private Long id;
+
+    /**
+     * 电子书id
+     */
+    @TableField("c_ebook_id")
+    private Long ebookId;
+
+    /**
+     * 父id
+     */
+    @TableField("c_parent")
+    private Long parent;
 
     /**
      * 名称
@@ -24,34 +37,10 @@ public class EbookEntity{
     private String name;
 
     /**
-     * 分类1
+     * 顺序
      */
-    @TableField("c_category1_id")
-    private String categoryId1;
-
-    /**
-     * 分类2
-     */
-    @TableField("c_category2_id")
-    private String categoryId2;
-
-    /**
-     * 描述
-     */
-    @TableField("c_description")
-    private String description;
-
-    /**
-     * 封面
-     */
-    @TableField("c_cover")
-    private String cover;
-
-    /**
-     * 文档数
-     */
-    @TableField("c_doc_count")
-    private Integer docCount;
+    @TableField("c_sort")
+    private Integer sort;
 
     /**
      * 阅读数
@@ -64,4 +53,5 @@ public class EbookEntity{
      */
     @TableField("c_vote_count")
     private Integer voteCount;
+
 }

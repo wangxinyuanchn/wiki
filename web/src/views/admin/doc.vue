@@ -191,8 +191,7 @@ export default defineComponent({
     };
     const modalVisible = ref(false);
     const modalLoading = ref(false);
-    const editor = new E('#content');
-    editor.config.zIndex = 0;
+    let editor : E;
 
     const handleSave = () => {
       modalLoading.value = true;
@@ -367,12 +366,13 @@ export default defineComponent({
     onMounted(() => {
       handleQuery();
 
+      editor = new E('#content');
+      editor.config.zIndex = 0;
       editor.create();
     });
 
     return {
       param,
-      // docs,
       level1,
       columns,
       loading,

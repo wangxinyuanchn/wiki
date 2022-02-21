@@ -33,7 +33,7 @@
           <img v-if="cover" :src="cover" alt="avatar"/>
         </template>
         <template v-slot:category="{ text, record }">
-          <span>{{ getCategoryName(record.category1Id) }} / {{ getCategoryName(record.category2Id) }}</span>
+          <span>{{ getCategoryName(record.categoryId1) }} / {{ getCategoryName(record.categoryId2) }}</span>
         </template>
         <template v-slot:action="{ text, record }">
           <a-space size="small">
@@ -189,8 +189,8 @@ export default defineComponent({
     const modalLoading = ref(false);
     const handleModalOk = () => {
       modalLoading.value = true;
-      ebook.value.category1Id = categoryIds.value[0];
-      ebook.value.category2Id = categoryIds.value[1];
+      ebook.value.categoryId1 = categoryIds.value[0];
+      ebook.value.categoryId2 = categoryIds.value[1];
       axios.post("/ebook/save", ebook.value).then((response) => {
         modalLoading.value = false;
         const data = response.data; // data = commonResp
@@ -214,7 +214,7 @@ export default defineComponent({
     const edit = (record: any) => {
       modalVisible.value = true;
       ebook.value = Tool.copy(record);
-      categoryIds.value = [ebook.value.category1Id, ebook.value.category2Id]
+      categoryIds.value = [ebook.value.categoryId1, ebook.value.categoryId2]
     };
 
     /**
@@ -270,11 +270,9 @@ export default defineComponent({
     };
 
     const getCategoryName = (cid: number) => {
-      // console.log(cid)
       let result = "";
       categorys.forEach((item: any) => {
-        if (item.id === cid) {
-          // return item.name; // 注意，这里直接return不起作用
+        if (item.id == cid) {
           result = item.name;
         }
       });

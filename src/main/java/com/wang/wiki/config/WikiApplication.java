@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @author Wang
@@ -19,6 +20,7 @@ import org.springframework.core.env.Environment;
 @ComponentScan("com.wang")
 @SpringBootApplication
 @MapperScan("com.wang.wiki.*.mapper")
+@EnableScheduling
 public class WikiApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(WikiApplication.class);

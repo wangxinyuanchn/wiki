@@ -52,6 +52,9 @@ public class EbookService {
         if (!ObjectUtils.isEmpty(req.getName())) {
             wrapper.like("c_name", req.getName());
         }
+        if (!ObjectUtils.isEmpty(req.getCategoryId2())) {
+            wrapper.eq("c_category2_id", req.getCategoryId2());
+        }
         Page<EbookEntity> page = new Page<>(req.getPage(), req.getSize());
         IPage<EbookEntity> ebookEntityIPage = ebookMapper.selectPage(page, wrapper);
 

@@ -5,13 +5,24 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
- * 电子书
+ * 电子书文档
+ *
  * @author Wang
  */
 @Data
 @ToString
-public class EbookVO extends PageReq {
+public class DocVO extends PageReq {
     private Long id;
+
+    /**
+     * 电子书id
+     */
+    private Long ebookId;
+
+    /**
+     * 父id
+     */
+    private Long parent;
 
     /**
      * 名称
@@ -19,29 +30,9 @@ public class EbookVO extends PageReq {
     private String name;
 
     /**
-     * 分类1
+     * 顺序
      */
-    private String categoryId1;
-
-    /**
-     * 分类2
-     */
-    private String categoryId2;
-
-    /**
-     * 描述
-     */
-    private String description;
-
-    /**
-     * 封面
-     */
-    private String cover;
-
-    /**
-     * 文档数
-     */
-    private Integer docCount;
+    private Integer sort;
 
     /**
      * 阅读数
@@ -52,4 +43,10 @@ public class EbookVO extends PageReq {
      * 点赞数
      */
     private Integer voteCount;
+
+    /**
+     * 内容
+     */
+    private String content;
+
 }
