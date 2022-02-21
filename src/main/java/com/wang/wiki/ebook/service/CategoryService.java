@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * 分类
+ *
  * @author Wang
  */
 @Service
@@ -33,7 +34,8 @@ public class CategoryService {
     private SnowFlake snowFlake;
 
     /**
-     * 全部分类列表查询
+     * 查询全部分类列表
+     *
      * @return 查询结果
      */
     public List<CategoryVO> all() {
@@ -45,7 +47,8 @@ public class CategoryService {
     }
 
     /**
-     * 分类列表查询
+     * 分页查询分类列表
+     *
      * @param req 查询条件
      * @return 查询结果
      */
@@ -69,8 +72,9 @@ public class CategoryService {
     }
 
     /**
-     * 新增分类
-     * @param req 新增分类内容
+     * 新增/修改分类
+     *
+     * @param req 新增/修改分类内容
      * @return 返回结果
      */
     public int save(CategoryVO req) {
@@ -87,6 +91,7 @@ public class CategoryService {
 
     /**
      * 删除分类
+     *
      * @param id 分类Id
      * @return 返回结果
      */

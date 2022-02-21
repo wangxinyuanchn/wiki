@@ -13,7 +13,7 @@ public class LoginUserContext implements Serializable {
 
     /**
      * 登录用户
-     * */
+     */
     private static ThreadLocal<UserVO> user = new ThreadLocal<>();
 
     public static UserVO getUser() {

@@ -53,6 +53,7 @@ public class DocController {
 
     /**
      * 新增/修改电子书文案
+     *
      * @param req 新增/修改电子书文案内容
      * @return 返回结果
      */
@@ -65,6 +66,7 @@ public class DocController {
 
     /**
      * 批量删除电子书文案
+     *
      * @param idsStr 电子书文案Id，用","分割
      * @return 返回结果
      */
@@ -78,6 +80,7 @@ public class DocController {
 
     /**
      * 电子书文案增加阅读数
+     *
      * @param id 电子书文案Id
      * @return 返回结果
      */
@@ -92,6 +95,7 @@ public class DocController {
     /**
      * 电子书文案增加点赞数
      * 远程IP+doc.id作为key，24小时内不能重复
+     *
      * @param id 电子书文案Id
      * @return 返回结果
      */

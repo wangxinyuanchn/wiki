@@ -34,6 +34,8 @@ public class LogAspect {
     private final static Logger LOG = LoggerFactory.getLogger(LogAspect.class);
 
     private final static String UNKNOWN = "unknown";
+    @Resource
+    private SnowFlake snowFlake;
 
     /**
      * 定义一个切点
@@ -41,9 +43,6 @@ public class LogAspect {
     @Pointcut("execution(public * com.wang..controller..*Controller.*(..))")
     public void controllerPointcut() {
     }
-
-    @Resource
-    private SnowFlake snowFlake;
 
     @Before("controllerPointcut()")
     public void doBefore(JoinPoint joinPoint) {

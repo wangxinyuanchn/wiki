@@ -36,6 +36,7 @@ public class UserController {
 
     /**
      * 分页查询用户列表
+     *
      * @param req 查询条件
      * @return 查询结果
      */
@@ -49,6 +50,7 @@ public class UserController {
 
     /**
      * 新增/修改用户
+     *
      * @param req 新增/修改用户内容
      * @return 返回结果
      */
@@ -63,6 +65,7 @@ public class UserController {
 
     /**
      * 删除用户
+     *
      * @param id 用户Id
      * @return 返回结果
      */
@@ -76,6 +79,7 @@ public class UserController {
 
     /**
      * 修改密码
+     *
      * @param req 修改用户内容
      * @return 返回结果
      */
@@ -90,6 +94,7 @@ public class UserController {
 
     /**
      * 登录
+     *
      * @param req 登录用户内容
      * @return 返回结果
      */
@@ -110,6 +115,7 @@ public class UserController {
 
     /**
      * 登出
+     *
      * @param token 登出用户token
      * @return 返回结果
      */

@@ -36,6 +36,7 @@ public class UserService {
 
     /**
      * 分页查询用户列表
+     *
      * @param req 查询条件
      * @return 查询结果
      */
@@ -62,6 +63,7 @@ public class UserService {
 
     /**
      * 新增/修改用户
+     *
      * @param req 新增/修改用户内容
      * @return 返回结果
      */
@@ -87,6 +89,7 @@ public class UserService {
 
     /**
      * 删除用户
+     *
      * @param id 用户Id
      * @return 返回结果
      */
@@ -96,6 +99,7 @@ public class UserService {
 
     /**
      * 根据登陆名查询用户
+     *
      * @param LoginName 登陆名
      * @return 查询结果
      */
@@ -113,6 +117,7 @@ public class UserService {
 
     /**
      * 修改密码
+     *
      * @param req 修改用户内容
      * @return 返回结果
      */
@@ -123,6 +128,7 @@ public class UserService {
 
     /**
      * 登录
+     *
      * @param req 登录用户内容
      * @return 返回结果
      */

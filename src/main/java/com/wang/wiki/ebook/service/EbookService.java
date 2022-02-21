@@ -32,7 +32,8 @@ public class EbookService {
     private SnowFlake snowFlake;
 
     /**
-     * 全部电子书列表查询
+     * 查询全部电子书列表
+     *
      * @return 查询结果
      */
     public List<EbookVO> all() {
@@ -42,7 +43,7 @@ public class EbookService {
     }
 
     /**
-     * 电子书列表查询
+     * 分页查询电子书列表
      *
      * @param req 查询条件
      * @return 查询结果
@@ -72,8 +73,9 @@ public class EbookService {
     }
 
     /**
-     * 新增电子书
-     * @param req 新增电子书内容
+     * 新增/修改电子书
+     *
+     * @param req 新增/修改电子书内容
      * @return 返回结果
      */
     public int save(EbookVO req) {
@@ -90,6 +92,7 @@ public class EbookService {
 
     /**
      * 删除电子书
+     *
      * @param id 电子书Id
      * @return 返回结果
      */

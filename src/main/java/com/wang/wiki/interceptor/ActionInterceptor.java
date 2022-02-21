@@ -2,8 +2,8 @@ package com.wang.wiki.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wang.wiki.resp.CommonResp;
-import com.wang.wiki.util.LoginUserContext;
 import com.wang.wiki.user.vo.UserVO;
+import com.wang.wiki.util.LoginUserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,6 +16,7 @@ import java.io.IOException;
 
 /**
  * 拦截器：Spring框架特有的，常用于登录校验，权限校验，请求日志打印
+ *
  * @author Wang
  */
 @Component

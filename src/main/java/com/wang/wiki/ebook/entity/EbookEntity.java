@@ -13,7 +13,7 @@ import lombok.ToString;
 @Data
 @ToString
 @TableName("wiki_ebook")
-public class EbookEntity{
+public class EbookEntity {
     @TableId("c_oid")
     private Long id;
 

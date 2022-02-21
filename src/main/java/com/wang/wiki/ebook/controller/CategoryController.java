@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * 分类
+ *
  * @author Wang
  */
 @RestController
@@ -23,6 +24,7 @@ public class CategoryController {
 
     /**
      * 查询全部分类列表
+     *
      * @return 查询结果
      */
     @GetMapping("/all")
@@ -35,6 +37,7 @@ public class CategoryController {
 
     /**
      * 分页查询分类列表
+     *
      * @param req 查询条件
      * @return 查询结果
      */
@@ -48,6 +51,7 @@ public class CategoryController {
 
     /**
      * 新增/修改分类
+     *
      * @param req 新增/修改分类内容
      * @return 返回结果
      */
@@ -61,6 +65,7 @@ public class CategoryController {
 
     /**
      * 删除分类
+     *
      * @param id 分类Id
      * @return 返回结果
      */

@@ -15,8 +15,9 @@ public class CopyUtil {
 
     /**
      * 单体复制
+     *
      * @param source 原对象
-     * @param clazz 目标类型
+     * @param clazz  目标类型
      * @return 目标对象
      */
     public static <T> T copy(Object source, Class<T> clazz) {
@@ -36,14 +37,15 @@ public class CopyUtil {
 
     /**
      * 列表复制
+     *
      * @param source 原对象list
-     * @param clazz 目标类型
+     * @param clazz  目标类型
      * @return 目标对象list
      */
     public static <T> List<T> copyList(List<?> source, Class<T> clazz) {
         List<T> target = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(source)){
-            for (Object c: source) {
+        if (!CollectionUtils.isEmpty(source)) {
+            for (Object c : source) {
                 T obj = copy(c, clazz);
                 target.add(obj);
             }

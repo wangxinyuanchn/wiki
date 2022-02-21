@@ -12,7 +12,7 @@ public class RequestContext implements Serializable {
 
     /**
      * 请求IP地址
-     * */
+     */
     private static final ThreadLocal<String> REMOTE_ADDRESS = new ThreadLocal<>();
 
     public static String getRemoteAddress() {

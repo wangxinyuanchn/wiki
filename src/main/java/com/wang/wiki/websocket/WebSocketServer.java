@@ -17,13 +17,11 @@ import java.util.HashMap;
 @ServerEndpoint("/ws/{token}")
 public class WebSocketServer {
     private static final Logger LOG = LoggerFactory.getLogger(WebSocketServer.class);
-
+    private static HashMap<String, Session> map = new HashMap<>();
     /**
      * 每个客户端一个token
      */
     private String token = "";
-
-    private static HashMap<String, Session> map = new HashMap<>();
 
     /**
      * 连接成功

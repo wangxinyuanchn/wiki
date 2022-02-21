@@ -5,10 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wang.wiki.ebook.entity.ContentEntity;
 import com.wang.wiki.ebook.entity.DocEntity;
-import com.wang.wiki.ebook.entity.EbookEntity;
 import com.wang.wiki.ebook.mapper.ContentMapper;
 import com.wang.wiki.ebook.mapper.DocMapper;
-import com.wang.wiki.ebook.mapper.EbookMapper;
 import com.wang.wiki.ebook.vo.DocVO;
 import com.wang.wiki.exception.BusinessException;
 import com.wang.wiki.exception.BusinessExceptionCode;
@@ -26,7 +24,6 @@ import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Wang
@@ -35,22 +32,23 @@ import java.util.Map;
 public class DocService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DocService.class);
-
+    @Resource
+    public RedisUtil redisUtil;
+    @Resource
+    public WsService wsService;
     @Resource
     private DocMapper docMapper;
-
     @Resource
     private ContentMapper contentMapper;
-
     @Resource
     private SnowFlake snowFlake;
 
-    @Resource
-    public RedisUtil redisUtil;
-
-    @Resource
-    public WsService wsService;
-
+    /**
+     * 按电子书Id查询电子书文案列表
+     *
+     * @param ebookId 电子书Id
+     * @return 查询结果
+     */
     public List<DocVO> all(Long ebookId) {
         QueryWrapper<DocEntity> wrapper = new QueryWrapper<>();
         wrapper.eq("c_ebook_id", ebookId);
@@ -60,6 +58,12 @@ public class DocService {
         return CopyUtil.copyList(docList, DocVO.class);
     }
 
+    /**
+     * 分页查询电子书文案列表
+     *
+     * @param req 查询条件
+     * @return 查询结果
+     */
     public PageResp<DocVO> list(DocVO req) {
         QueryWrapper<DocEntity> wrapper = new QueryWrapper<>();
         wrapper.orderByAsc("c_sort");
@@ -80,7 +84,10 @@ public class DocService {
     }
 
     /**
-     * 保存
+     * 新增/修改电子书文案
+     *
+     * @param req 新增/修改电子书文案内容
+     * @return 返回结果
      */
     @Transactional
     public void save(DocVO req) {
@@ -105,16 +112,24 @@ public class DocService {
         }
     }
 
-    public void delete(Long id) {
-        docMapper.deleteById(id);
-    }
-
+    /**
+     * 批量删除电子书文案
+     *
+     * @param ids 电子书文案Id
+     * @return 返回结果
+     */
     public void delete(List<String> ids) {
         QueryWrapper<DocEntity> wrapper = new QueryWrapper<>();
         wrapper.in("c_oid", ids);
         docMapper.delete(wrapper);
     }
 
+    /**
+     * 电子书文案增加阅读数
+     *
+     * @param id 电子书文案Id
+     * @return 返回结果
+     */
     public String findContent(Long id) {
         ContentEntity content = contentMapper.selectById(id);
         // 文档阅读数+1
@@ -129,7 +144,11 @@ public class DocService {
     }
 
     /**
-     * 点赞
+     * 电子书文案增加点赞数
+     * 远程IP+doc.id作为key，24小时内不能重复
+     *
+     * @param id 电子书文案Id
+     * @return 返回结果
      */
     public void vote(Long id) {
         // 远程IP+doc.id作为key，24小时内不能重复
