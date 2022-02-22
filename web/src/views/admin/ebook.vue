@@ -100,6 +100,9 @@
       <a-form-item label="描述">
         <a-input v-model:value="ebook.description" type="textarea"/>
       </a-form-item>
+      <a-form-item label="备注">
+        <a-input v-model:value="ebook.remark" type="textarea"/>
+      </a-form-item>
     </a-form>
   </a-modal>
 </template>
@@ -256,7 +259,8 @@ export default defineComponent({
         originFileObj: undefined
       };
       fileList.value = [file];
-      categoryIds.value = [ebook.value.categoryId1, ebook.value.categoryId2]
+      console.log(categoryIds.value);
+      categoryIds.value = [parseInt(ebook.value.categoryId1), parseInt(ebook.value.categoryId2)]
     };
 
     /**

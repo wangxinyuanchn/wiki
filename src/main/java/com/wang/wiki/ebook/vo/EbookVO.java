@@ -1,5 +1,6 @@
 package com.wang.wiki.ebook.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.wang.wiki.blob.vo.BlobVO;
 import com.wang.wiki.req.PageReq;
 import lombok.Data;
@@ -54,6 +55,11 @@ public class EbookVO extends PageReq {
      * 点赞数
      */
     private Integer voteCount;
+
+    /**
+     * 备注
+     */
+    private String remark;
 
     /**
      * 附件

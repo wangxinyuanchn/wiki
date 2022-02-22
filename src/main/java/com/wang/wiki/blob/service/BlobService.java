@@ -36,11 +36,13 @@ public class BlobService {
     public BlobVO search(Long id) throws SQLException {
         BlobEntity blobEntity = blobMapper.selectById(id);
         BlobVO blobVO = new BlobVO();
-        blobVO.setId(blobEntity.getId());
-        blobVO.setFileName(blobEntity.getFileName());
-        blobVO.setSize(blobEntity.getSize());
-        Blob file = blobEntity.getFile();
-        blobVO.setFileByte(file.getBytes(1, (int) file.length()));
+        if (blobEntity != null) {
+            blobVO.setId(blobEntity.getId());
+            blobVO.setFileName(blobEntity.getFileName());
+            blobVO.setSize(blobEntity.getSize());
+            Blob file = blobEntity.getFile();
+            blobVO.setFileByte(file.getBytes(1, (int) file.length()));
+        }
         return blobVO;
     }
 

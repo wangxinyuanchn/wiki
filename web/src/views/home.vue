@@ -51,9 +51,14 @@
             </template>
             <a-list-item-meta :description="item.description">
               <template #title>
-                <router-link :to="'/doc?ebookId=' + item.id">
-                  {{ item.name }}
-                </router-link>
+                <a-popover>
+                  <template #content>
+                    {{ item.remark }}
+                  </template>
+                  <router-link :to="'/doc?ebookId=' + item.id">
+                    {{ item.name }}
+                  </router-link>
+                </a-popover>
               </template>
               <template #avatar>
                 <a-avatar :src="'data:image/jpeg;base64,' + item.blobVO.fileByte"/>

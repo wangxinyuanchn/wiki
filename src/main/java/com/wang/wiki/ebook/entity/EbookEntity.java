@@ -64,4 +64,10 @@ public class EbookEntity {
      */
     @TableField("c_vote_count")
     private Integer voteCount;
+
+    /**
+     * 备注
+     */
+    @TableField("c_remark")
+    private String remark;
 }
