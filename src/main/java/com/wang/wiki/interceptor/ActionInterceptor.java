@@ -14,6 +14,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 拦截器：Spring框架特有的，常用于登录校验，权限校验，请求日志打印
@@ -34,7 +35,7 @@ public class ActionInterceptor implements HandlerInterceptor {
         }
 
         UserVO userLoginResp = LoginUserContext.getUser();
-        if (UtilConstant.ADMIN.equals(userLoginResp.getLoginName())) {
+        if (!UtilConstant.ADMIN.equals(userLoginResp.getLoginName())) {
             // admin用户不拦截
             return true;
         }
@@ -45,9 +46,11 @@ public class ActionInterceptor implements HandlerInterceptor {
         commonResp.setSuccess(false);
         commonResp.setContent(false);
         commonResp.setMessage("哈哈，操作被拦截了，你就当操作成功了！示例网站暂不开放增删改操作");
+        response.setHeader("Content-type", "application/json;charset=UTF-8");
         response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().print(JSONObject.toJSON(commonResp));
+        response.reset();
+        response.getOutputStream().write(JSONObject.toJSONString(commonResp).getBytes(StandardCharsets.UTF_8));
         return false;
     }
 

@@ -3,6 +3,7 @@ package com.wang.wiki.ebook.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wang.wiki.blob.service.BlobService;
 import com.wang.wiki.ebook.entity.EbookEntity;
 import com.wang.wiki.ebook.mapper.EbookMapper;
 import com.wang.wiki.ebook.vo.EbookVO;
@@ -12,9 +13,12 @@ import com.wang.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +33,9 @@ public class EbookService {
     private EbookMapper ebookMapper;
 
     @Resource
+    private BlobService blobService;
+
+    @Resource
     private SnowFlake snowFlake;
 
     /**
@@ -36,10 +43,10 @@ public class EbookService {
      *
      * @return 查询结果
      */
-    public List<EbookVO> all() {
+    public List<EbookVO> all() throws SQLException {
         List<EbookEntity> categoryList = ebookMapper.selectList(null);
 
-        return CopyUtil.copyList(categoryList, EbookVO.class);
+        return copyList(categoryList);
     }
 
     /**
@@ -48,7 +55,7 @@ public class EbookService {
      * @param req 查询条件
      * @return 查询结果
      */
-    public PageResp<EbookVO> list(EbookVO req) {
+    public PageResp<EbookVO> list(EbookVO req) throws SQLException {
         QueryWrapper<EbookEntity> wrapper = new QueryWrapper<>();
         if (!ObjectUtils.isEmpty(req.getName())) {
             wrapper.like("c_name", req.getName());
@@ -63,7 +70,7 @@ public class EbookService {
         LOG.info("总页数：{}", ebookEntityPage.getPages());
 
         // 列表复制
-        List<EbookVO> list = CopyUtil.copyList(ebookEntityPage.getRecords(), EbookVO.class);
+        List<EbookVO> list = copyList(ebookEntityPage.getRecords());
 
         PageResp<EbookVO> pageResp = new PageResp<>();
         pageResp.setTotal(ebookEntityPage.getTotal());
@@ -98,5 +105,23 @@ public class EbookService {
      */
     public int delete(Long id) {
         return ebookMapper.deleteById(id);
+    }
+
+    /**
+     * 列表复制
+     *
+     * @param source 原对象list
+     * @return 目标对象list
+     */
+    public List<EbookVO> copyList(List<EbookEntity> source) throws SQLException {
+        List<EbookVO> target = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(source)) {
+            for (EbookEntity ebookEntity : source) {
+                EbookVO ebookVO = CopyUtil.copy(ebookEntity, EbookVO.class);
+                ebookVO.setBlobVO(blobService.search(ebookVO.getCover()));
+                target.add(ebookVO);
+            }
+        }
+        return target;
     }
 }

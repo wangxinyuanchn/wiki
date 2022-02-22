@@ -57,6 +57,13 @@ public class CopyUtil {
         return target;
     }
 
+    /**
+     * 列表复制
+     *
+     * @param source 原对象list
+     * @param clazz  目标类型
+     * @return 目标对象list
+     */
     public static <T> List<T> copyListMap(List<Map<String, Object>> source, Class<T> clazz) {
         List<T> target = new ArrayList<>();
         if (!CollectionUtils.isEmpty(source)) {

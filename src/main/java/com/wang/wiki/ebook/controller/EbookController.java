@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public class EbookController {
      * @return 查询结果
      */
     @GetMapping("/all")
-    public CommonResp<List<EbookVO>> all() {
+    public CommonResp<List<EbookVO>> all() throws SQLException {
         CommonResp<List<EbookVO>> resp = new CommonResp<>();
         List<EbookVO> list = ebookService.all();
         resp.setContent(list);
@@ -42,7 +43,7 @@ public class EbookController {
      * @return 查询结果
      */
     @GetMapping("/list")
-    public CommonResp<PageResp<EbookVO>> list(@Valid EbookVO req) {
+    public CommonResp<PageResp<EbookVO>> list(@Valid EbookVO req) throws SQLException {
         CommonResp<PageResp<EbookVO>> resp = new CommonResp<>();
         PageResp<EbookVO> list = ebookService.list(req);
         resp.setContent(list);

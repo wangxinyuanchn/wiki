@@ -45,7 +45,7 @@ public class EbookEntity {
      * 封面
      */
     @TableField("c_cover")
-    private String cover;
+    private Long cover;
 
     /**
      * 文档数

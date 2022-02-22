@@ -56,7 +56,7 @@
                 </router-link>
               </template>
               <template #avatar>
-                <a-avatar :src="item.cover"/>
+                <a-avatar :src="'data:image/jpeg;base64,' + item.blobVO.fileByte"/>
               </template>
             </a-list-item-meta>
           </a-list-item>

@@ -29,8 +29,8 @@
           :loading="loading"
           @change="handleTableChange"
       >
-        <template #cover="{ text: cover }">
-          <img v-if="cover" :src="cover" alt="avatar"/>
+        <template #blobVO="{ text: record }">
+          <img v-if="record" :src="'data:image/jpeg;base64,' + record.blobVO.fileByte" alt="avatar"/>
         </template>
         <template v-slot:category="{ text, record }">
           <span>{{ getCategoryName(record.categoryId1) }} / {{ getCategoryName(record.categoryId2) }}</span>
@@ -69,7 +69,23 @@
   >
     <a-form :model="ebook" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
       <a-form-item label="封面">
-        <a-input v-model:value="ebook.cover"/>
+        <a-upload
+            action="#"
+            v-model:file-list="fileList"
+            accept=".jpg, .png"
+            :before-upload="beforeUpload"
+            :customRequest="customUpload"
+            @download="handleDownload"
+            :showUploadList="{
+              showRemoveIcon: true,
+              showDownloadIcon: true
+            }"
+        >
+          <a-button>
+            <upload-outlined></upload-outlined>
+            上传
+          </a-button>
+        </a-upload>
       </a-form-item>
       <a-form-item label="名称">
         <a-input v-model:value="ebook.name"/>
@@ -110,8 +126,7 @@ export default defineComponent({
     const columns = [
       {
         title: '封面',
-        dataIndex: 'cover',
-        slots: {customRender: 'cover'}
+        slots: {customRender: 'blobVO'}
       },
       {
         title: '名称',
@@ -140,6 +155,19 @@ export default defineComponent({
       }
     ];
 
+    interface FileItem {
+      uid: string;
+      name?: string;
+      status?: string;
+      response?: string;
+      url?: string;
+      type?: string;
+      size: number;
+      originFileObj: any;
+    }
+
+    const fileList = ref<FileItem[]>();
+
     /**
      * 数据查询
      **/
@@ -147,6 +175,7 @@ export default defineComponent({
       loading.value = true;
       // 如果不清空现有数据，则编辑保存重新加载数据后，再点编辑，则列表显示的还是编辑前的数据
       ebooks.value = [];
+      fileList.value = [];
       axios.get("/ebook/list", {
         params: {
           page: params.page,
@@ -189,6 +218,9 @@ export default defineComponent({
     const modalLoading = ref(false);
     const handleModalOk = () => {
       modalLoading.value = true;
+      if(fileList.value){
+        ebook.value.cover = fileList.value[0].uid;
+      }
       ebook.value.categoryId1 = categoryIds.value[0];
       ebook.value.categoryId2 = categoryIds.value[1];
       axios.post("/ebook/save", ebook.value).then((response) => {
@@ -214,6 +246,16 @@ export default defineComponent({
     const edit = (record: any) => {
       modalVisible.value = true;
       ebook.value = Tool.copy(record);
+      fileList.value = [];
+      let file: FileItem = {
+        uid: ebook.value.cover,
+        name: ebook.value.blobVO.fileName,
+        status: 'done',
+        url: undefined,
+        size: ebook.value.blobVO.size,
+        originFileObj: undefined
+      };
+      fileList.value = [file];
       categoryIds.value = [ebook.value.categoryId1, ebook.value.categoryId2]
     };
 
@@ -223,11 +265,12 @@ export default defineComponent({
     const add = () => {
       modalVisible.value = true;
       ebook.value = {};
+      fileList.value = [];
     };
 
     const handleDelete = (id: number) => {
       axios.delete("/ebook/delete/" + id).then((response) => {
-        const data = response.data; // data = commonResp
+        const data = response.data;
         if (data.success) {
           // 重新加载列表
           handleQuery({
@@ -279,6 +322,53 @@ export default defineComponent({
       return result;
     };
 
+    // 图片上传前限制
+    const beforeUpload = (file: FileItem) => {
+      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+      if (!isJpgOrPng) {
+        message.error('请上传 JPG、PNG 格式图片!');
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        message.error('图片不可大于 2MB!');
+      }
+      return isJpgOrPng && isLt2M;
+    };
+
+    // 自定义上传获取文件内容
+    const customUpload = (data: any) => {
+      const formData = new FormData();
+      formData.append('file', data.file);
+      axios.post("/blob/save", formData).then((response) => {
+        if (response.data.success) {
+          data.file.uid = response.data.content;
+          fileList.value = [data.file];
+          data.onSuccess(response, data.file);
+        } else {
+          message.error(response.data.message);
+        }
+      });
+    };
+
+    const handleDownload = (file: FileItem) => {
+      let url = '/blob/search/' + file.uid;
+      axios.get(url).then((response) => {
+        //创建a标签
+        const link = document.createElement("a");
+        //a标签添加属性
+        link.setAttribute("href", 'data:image/jpeg;base64,' + response.data.content.fileByte)
+        link.setAttribute("download", response.data.content.fileName)
+        link.setAttribute("target", "_blank")
+        document.body.appendChild(link);
+        //执行下载
+        link.click();
+        //释放url
+        URL.revokeObjectURL(link.href);
+        //释放标签
+        document.body.removeChild(link);
+      });
+    };
+
     onMounted(() => {
       handleQueryCategory();
     });
@@ -303,7 +393,12 @@ export default defineComponent({
       categoryIds,
       level1,
 
-      handleDelete
+      handleDelete,
+
+      fileList,
+      beforeUpload,
+      customUpload,
+      handleDownload,
     }
   }
 });

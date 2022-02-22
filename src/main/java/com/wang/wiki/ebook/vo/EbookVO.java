@@ -1,5 +1,6 @@
 package com.wang.wiki.ebook.vo;
 
+import com.wang.wiki.blob.vo.BlobVO;
 import com.wang.wiki.req.PageReq;
 import lombok.Data;
 import lombok.ToString;
@@ -37,7 +38,7 @@ public class EbookVO extends PageReq {
     /**
      * 封面
      */
-    private String cover;
+    private Long cover;
 
     /**
      * 文档数
@@ -53,4 +54,9 @@ public class EbookVO extends PageReq {
      * 点赞数
      */
     private Integer voteCount;
+
+    /**
+     * 附件
+     */
+    private BlobVO blobVO;
 }
